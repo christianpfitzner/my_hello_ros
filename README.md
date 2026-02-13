@@ -41,18 +41,70 @@ In **jedem** neuen Terminal (oder in deiner `.bashrc`):
 source /opt/ros/$ROS_DISTRO/setup.bash
 ```
 
+### 2) Workspace erstellen und Paket bauen
 
+Erstelle einen ROS 2 Workspace und baue das Paket:
 
----
+```bash
+# Workspace-Verzeichnis erstellen
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
 
-## Publisher starten
+# Dieses Repository klonen
+git clone https://github.com/christianpfitzner/my_hello_ros.git
+
+# Zurück zum Workspace-Root
+cd ~/ros2_ws
+
+# Paket bauen
+colcon build
+
+# Workspace-Setup laden
+source install/setup.bash
 ```
+
+### 3) Publisher starten
+
+Öffne ein **erstes Terminal** und starte den Publisher:
+
+```bash
+source /opt/ros/$ROS_DISTRO/setup.bash
+cd ~/ros2_ws
+source install/setup.bash
 ros2 run my_hello_ros my_hello_ros_publisher
 ```
 
+Du solltest sehen: `Publishing: "Hello ROS2"` (alle 0.5 Sekunden)
+
+### 4) Subscriber starten
+
+Öffne ein **zweites Terminal** und starte den Subscriber:
+
+```bash
+source /opt/ros/$ROS_DISTRO/setup.bash
+cd ~/ros2_ws
+source install/setup.bash
+ros2 run my_hello_ros my_hello_ros_subscriber
+```
+
+Du solltest sehen: `I heard: "Hello ROS2"`
+
 ---
 
-## Subscriber starten
+## Weitere nützliche Befehle
+
+### Topics anzeigen
+```bash
+ros2 topic list
 ```
-ros2 run my_hello_ros my_hello_ros_subscriber
+
+### Topic-Daten live ansehen
+```bash
+ros2 topic echo /hello_ros_topic
+```
+
+### Node-Informationen anzeigen
+```bash
+ros2 node list
+ros2 node info /my_hello_ros_publisher
 ```
