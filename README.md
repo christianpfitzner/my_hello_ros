@@ -15,7 +15,7 @@ By the end, you will have built a ROS 2 workspace, run both nodes, and inspected
 - The `colcon` build tool
 - A terminal, and Git to clone this repository
 
-The commands below use Bash. If your course specifies a particular ROS 2 distribution, use that distribution throughout.
+The commands below use Bash and assume ROS 2 Humble is installed. If you use another distribution, replace `humble` in the commands with its name.
 
 ## Quick start
 
@@ -35,12 +35,12 @@ Move to the workspace root, load your ROS 2 installation, and build:
 
 ```bash
 cd ~/ros2_ws
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/humble/setup.bash
 colcon build
 source install/setup.bash
 ```
 
-`source` makes ROS 2 commands and packages available in the current terminal. Run the ROS setup command in every new terminal. If `$ROS_DISTRO` is empty, replace it with your installed distribution name, such as `humble` (for example, `source /opt/ros/humble/setup.bash`).
+`source` makes ROS 2 commands and packages available in the current terminal. Run both setup commands in every new terminal.
 
 ### 3. Start the publisher
 
@@ -48,7 +48,7 @@ In the first terminal, run:
 
 ```bash
 cd ~/ros2_ws
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/humble/setup.bash
 source install/setup.bash
 ros2 run my_hello_ros my_hello_ros_publisher
 ```
@@ -67,7 +67,7 @@ Open a second terminal and run:
 
 ```bash
 cd ~/ros2_ws
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/humble/setup.bash
 source install/setup.bash
 ros2 run my_hello_ros my_hello_ros_subscriber
 ```
@@ -109,6 +109,6 @@ ros2 node info /my_hello_ros_publisher
 
 ## Troubleshooting
 
-- **`/opt/ros/$ROS_DISTRO/setup.bash` not found:** Check which ROS 2 distribution is installed and replace `$ROS_DISTRO` with its name, such as `humble`.
+- **`/opt/ros/humble/setup.bash` not found:** Check which ROS 2 distribution is installed and replace `humble` with its name.
 - **`Package 'my_hello_ros' not found`:** From `~/ros2_ws`, rebuild with `colcon build`, then run `source install/setup.bash` in the terminal where you launch the node.
 - **No messages appear in the subscriber:** Make sure the publisher is still running and both terminals have sourced the same ROS 2 installation and workspace.
