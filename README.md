@@ -1,110 +1,114 @@
-# My Hello Ros
+# My Hello ROS
 
-Kleines **ROS 2 (rclpy)**-Beispielpaket als Einstieg für den Blockkurs **„Einführung in die mobile Robotik“** an der Technischen Hochschule Nürnberg Georg Simon Ohm.  
-Das Repo zeigt die wichtigsten ROS2-Grundideen anhand eines minimalen **Publisher/Subscriber**-Beispiels:
+A small **ROS 2 Python (`rclpy`) example** for students who are new to ROS. This package is designed as a first hands-on exercise for the *Introduction to Mobile Robotics* course at Nuremberg Institute of Technology (Technische Hochschule Nürnberg Georg Simon Ohm).
 
-- Node **Publisher** sendet periodisch eine Textnachricht auf ein Topic
-- Node **Subscriber** empfängt die Nachricht und loggt sie
+You will build and run two ROS 2 nodes that communicate using a topic:
 
-> Ziel: In wenigen Minuten ein ROS2-Workspace aufsetzen, ein Paket bauen und die Kommunikation über Topics nachvollziehen.
+- The **publisher** sends the text `Hello ROS2` every 0.5 seconds.
+- The **subscriber** listens for that text and prints each message it receives.
 
----
+By the end, you will have built a ROS 2 workspace, run both nodes, and inspected their topic communication from the command line.
 
-## Inhalte
+## What you need
 
-Dieses Paket enthält zwei ROS2-Nodes:
+- Ubuntu with a ROS 2 distribution installed (for example, ROS 2 Humble)
+- The `colcon` build tool
+- A terminal, and Git to clone this repository
 
-- `my_hello_ros_publisher`  
-  Publiziert `std_msgs/msg/String` auf `hello_ros_topic` (default: alle 0.5 s, Inhalt: `"Hello ROS2"`)
+The commands below use Bash and assume ROS 2 Humble is installed. If you use another distribution, replace `humble` in the commands with its name.
 
-- `my_hello_ros_subscriber`  
-  Abonniert `hello_ros_topic` und gibt empfangene Nachrichten aus
+## Quick start
 
----
+### 1. Set up a workspace
 
-## Voraussetzungen
-
-- Ubuntu (empfohlen für den Kurs) + installierte ROS 2 Distribution (z. B. Humble)
-- `colcon` Build-Tools
-- Terminal-Grundlagen (source, workspace, etc.)
-
-
----
-
-## Quickstart
-
-### 1) ROS 2 Umgebung laden
-
-In **jedem** neuen Terminal (oder in deiner `.bashrc`):
+Open a terminal and create a workspace. A ROS 2 workspace is a directory where you keep and build packages; its `src` directory contains the package source code.
 
 ```bash
-source /opt/ros/$ROS_DISTRO/setup.bash
-```
-
-### 2) Workspace erstellen und Paket bauen
-
-Erstelle einen ROS 2 Workspace und baue das Paket:
-
-```bash
-# Workspace-Verzeichnis erstellen
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
-
-# Dieses Repository klonen
 git clone https://github.com/christianpfitzner/my_hello_ros.git
+```
 
-# Zurück zum Workspace-Root
+### 2. Build the package
+
+Move to the workspace root, load your ROS 2 installation, and build:
+
+```bash
 cd ~/ros2_ws
-
-# Paket bauen
+source /opt/ros/humble/setup.bash
 colcon build
-
-# Workspace-Setup laden
 source install/setup.bash
 ```
 
-### 3) Publisher starten
+`source` makes ROS 2 commands and packages available in the current terminal. Run both setup commands in every new terminal.
 
-Öffne ein **erstes Terminal** und starte den Publisher:
+### 3. Start the publisher
+
+In the first terminal, run:
 
 ```bash
-source /opt/ros/$ROS_DISTRO/setup.bash
 cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
 source install/setup.bash
 ros2 run my_hello_ros my_hello_ros_publisher
 ```
 
-Du solltest sehen: `Publishing: "Hello ROS2"` (alle 0.5 Sekunden)
+The publisher should repeatedly print:
 
-### 4) Subscriber starten
+```text
+Publishing: "Hello ROS2"
+```
 
-Öffne ein **zweites Terminal** und starte den Subscriber:
+Keep this terminal running.
+
+### 4. Start the subscriber
+
+Open a second terminal and run:
 
 ```bash
-source /opt/ros/$ROS_DISTRO/setup.bash
 cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
 source install/setup.bash
 ros2 run my_hello_ros my_hello_ros_subscriber
 ```
 
-Du solltest sehen: `I heard: "Hello ROS2"`
+The subscriber should print messages like:
 
----
+```text
+I heard: "Hello ROS2"
+```
 
-## Weitere nützliche Befehle
+Both nodes must be running at the same time for the subscriber to receive the publisher's messages. Press **Ctrl+C** in a node's terminal to stop it.
 
-### Topics anzeigen
+## What is happening?
+
+A **node** is a running ROS 2 program. The publisher node sends `std_msgs/msg/String` messages on the `hello_ros_topic` topic, and the subscriber node listens to that same topic. A **topic** is a named channel that lets ROS 2 nodes exchange messages without needing to call each other directly.
+
+## Explore with ROS 2 commands
+
+With both nodes running, try these commands in another terminal. Remember to source the ROS 2 and workspace setup files first.
+
+List active topics:
+
 ```bash
 ros2 topic list
 ```
 
-### Topic-Daten live ansehen
+Print messages from the topic:
+
 ```bash
 ros2 topic echo /hello_ros_topic
 ```
 
-### Node-Informationen anzeigen
+List running nodes and inspect the publisher:
+
 ```bash
 ros2 node list
 ros2 node info /my_hello_ros_publisher
 ```
+
+## Troubleshooting
+
+- **`/opt/ros/humble/setup.bash` not found:** Check which ROS 2 distribution is installed and replace `humble` with its name.
+- **`Package 'my_hello_ros' not found`:** From `~/ros2_ws`, rebuild with `colcon build`, then run `source install/setup.bash` in the terminal where you launch the node.
+- **No messages appear in the subscriber:** Make sure the publisher is still running and both terminals have sourced the same ROS 2 installation and workspace.
